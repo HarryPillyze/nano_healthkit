@@ -1,16 +1,13 @@
 import 'dart:async';
-import 'dart:typed_data';
-import 'dart:ui';
 
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:nano_healthkit_plugin/healthdata.pb.dart';
 
 class NanoHealthkitPlugin {
   static const _channel = const MethodChannel('nano_healthkit_plugin');
   static const _stream = const EventChannel('nano_healthkit_plugin_stream');
   static var _subscriberMethod;
-  static StreamSubscription _subscription;
+  static StreamSubscription? _subscription;
 
   /// Initialize the plugin and request relevant permissions from the user.
   static Future<void> initialize<T>(void onData(T event)) async {
@@ -64,7 +61,9 @@ class NanoHealthkitPlugin {
   /// Only subscribes to types indicated in [request]. The method in [onData]
   /// gets called on each new available data in a ``HealthDataList`` object.
   static void subscribeToUpdates<T>(
-      HealthTypeList request, void onData(T event)) {
+    HealthTypeList? request,
+    void onData(T event),
+  ) {
     _subscriberMethod = onData;
     _subscription?.cancel();
     _subscription = _stream

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:nano_healthkit_plugin/nano_healthkit_plugin.dart';
 import 'package:nano_healthkit_plugin/healthdata.pb.dart';
-import 'package:nano_healthkit_plugin/healthdata.pbenum.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(MyApp());
@@ -156,19 +155,19 @@ class _MyAppState extends State<MyApp> {
 
   _saveUpdateData(HealthDataList updates) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> saves = prefs.getStringList("savedUpdates") ?? List<String>();
+    List<String> saves = prefs.getStringList("savedUpdates") ?? [];
     saves.add(updates.toString() + "\n");
     prefs.setStringList("savedUpdates", saves);
   }
 
   _pullSavedData() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> saves = prefs.getStringList("savedUpdates") ?? List<String>();
+    List<String> saves = prefs.getStringList("savedUpdates") ?? [];
     setState(() {
       _pulledBackgroundDataString = saves.toString();
     });
     saves.clear();
-    prefs.setStringList("savedUpdates", List<String>());
+    prefs.setStringList("savedUpdates", []);
   }
 
   @override
@@ -185,7 +184,7 @@ class _MyAppState extends State<MyApp> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text("Authorize"),
                     onPressed: () {
                       _authorize();
@@ -194,7 +193,7 @@ class _MyAppState extends State<MyApp> {
               Text('Authorized: $_isAuthorized\n'),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text("Filter Only Existing Types"),
                     onPressed: () {
                       _filterExistingTypes();
@@ -203,7 +202,7 @@ class _MyAppState extends State<MyApp> {
               Text('Valid types: $_exisitngTypesString\n'),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text(_isSubscribed
                         ? "Unsubscribe to updates"
                         : "Subscribe to updates"),
@@ -214,28 +213,28 @@ class _MyAppState extends State<MyApp> {
               Text('$_updateMessageString\n'),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text("Pull saved updates"),
                     onPressed: _pullSavedData),
               ),
               Text('Saved data: $_pulledBackgroundDataString\n'),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text("Get basic data"),
                     onPressed: _getUserBasicHealthData),
               ),
               Text('Basic health: $_basicHealthString\n'),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text("Get statistics data"),
                     onPressed: _getUserStatisticsData),
               ),
               Text('Statistics data: $_statisticsString\n'),
               Padding(
                 padding: const EdgeInsets.all(12.0),
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text("Get batch data"),
                     onPressed: _getUserBatchData),
               ),
